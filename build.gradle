@@ -31,6 +31,8 @@ buildscript {
         classpath("gradle.plugin.com.github.jengelman.gradle.plugins:shadow:7.0.0")
         classpath 'gradle.plugin.org.inferred:gradle-processors:3.3.0'
         classpath 'com.palantir.baseline:gradle-baseline-java:4.0.0'
+        classpath 'com.esotericsoftware:kryo:5.4.0'
+
     }
 }
 
@@ -84,7 +86,8 @@ ext.libraries = [
         vavr           : "io.vavr:vavr:${versions.vavr}",
         vavrJackson    : "io.vavr:vavr-jackson:${versions.vavr}",
         vavrTest       : "io.vavr:vavr-test:${versions.vavr}",
-        zip4j          : "net.lingala.zip4j:zip4j:2.9.0"
+        zip4j          : "net.lingala.zip4j:zip4j:2.9.0",
+        kryo           : "com.esotericsoftware:kryo:kryo:5.4.0"
 ]
 
 allprojects {

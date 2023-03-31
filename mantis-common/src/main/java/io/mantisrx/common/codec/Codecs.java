@@ -27,6 +27,11 @@ import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
+
+
 
 public class Codecs {
 
@@ -119,6 +124,33 @@ public class Codecs {
     }
 
     public static <T extends Serializable> Codec<T> javaSerializer() {
+        return new Codec<T>() {
+            @Override
+            public T decode(byte[] bytes) {
+                ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
+                try {
+                    ObjectInput in = new ObjectInputStream(bis);
+                    return (T) in.readObject();
+                } catch (IOException | ClassNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            @Override
+            public byte[] encode(T value) {
+                try (ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
+                    try (ObjectOutput out = new ObjectOutputStream(bos)) {
+                        out.writeObject(value);
+                        return bos.toByteArray();
+                    }
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        };
+    }
+
+    public static <T extends Serializable> Codec<T> kryoSerializer() {
         return new Codec<T>() {
             @Override
             public T decode(byte[] bytes) {
